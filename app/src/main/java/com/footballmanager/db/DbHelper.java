@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 
 public class DbHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 6;
+    public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "Warships.db";
 
     public DbHelper(Context context) {
@@ -21,6 +21,7 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(UserContract.SQL_CREATE_ENTRIES);
+        db.execSQL(RoleContract.SQL_CREATE_ENTRIES);
 
         // Create roles
 
@@ -37,6 +38,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(UserContract.SQL_DELETE_ENTRIES);
+        db.execSQL(RoleContract.SQL_DELETE_ENTRIES);
         onCreate(db);
     }
 

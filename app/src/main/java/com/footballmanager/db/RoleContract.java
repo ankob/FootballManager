@@ -1,6 +1,11 @@
 package com.footballmanager.db;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Andrew on 23-Feb-17.
@@ -20,4 +25,30 @@ public final class RoleContract {
                 + Role.NAME + " TEXT" +
             ");";
     public static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + Role.TABLE_NAME;
+
+    private static List<com.footballmanager.model.Role> roles = new LinkedList<>();
+
+    public static List<com.footballmanager.model.Role> getRoles(SQLiteDatabase db) {
+        if (!roles.isEmpty())
+            return roles;
+
+        String[] columns = { Role.NAME, Role._ID };
+        String[] selectArgs = {};
+        Cursor cursor = db.query(
+                Role.TABLE_NAME,
+                columns,
+                "",
+                selectArgs,
+                "",
+                "",
+                ""
+        );
+        while (cursor.moveToNext()) {
+            roles.add(new com.footballmanager.model.Role(
+                    cursor.getString(cursor.getColumnIndex(Role.NAME)),
+                    cursor.getLong(cursor.getColumnIndex(Role._ID))
+            ));
+        }
+        return roles;
+    }
 }
