@@ -4,10 +4,12 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
+import android.util.Log;
+
+import java.math.BigInteger;
 import java.security.MessageDigest;
 
 import com.footballmanager.model.Role;
-import com.footballmanager.model.User;
 
 /**
  * Created by Andrew on 01-Feb-17.
@@ -15,6 +17,7 @@ import com.footballmanager.model.User;
 
 public final class UserContract {
     private UserContract() {}
+    static MessageDigest messageDigest;
 
     public static class User implements BaseColumns{
         public static final String TABLE_NAME = "users";
@@ -36,11 +39,12 @@ public final class UserContract {
     public static com.footballmanager.model.User addNewUser(String name, String pass, Role role, SQLiteDatabase db) {
         com.footballmanager.model.User newUser = new com.footballmanager.model.User(name, role);
         try {
-            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
             ContentValues cv = new ContentValues();
             cv.put(User.NAME, newUser.getName());
-            cv.put(User.HASH, messageDigest.digest((newUser.getName() + pass).getBytes()));
+            cv.put(User.HASH, calcHash(name, pass));
             cv.put(User.ROLE, role.getId());
+            Log.i("OLOLO", "addNewUser: " + cv.get(User.HASH));
+            Log.i("OLOLO", "addNewUser: " + name + pass);
             db.insert(User.TABLE_NAME, null, cv);
             return newUser;
         } catch (Exception e) {
@@ -51,10 +55,11 @@ public final class UserContract {
     public static com.footballmanager.model.User getUser(String name, String pass, SQLiteDatabase db) {
         com.footballmanager.model.User result = null;
         try {
-            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
             String[] columns = {User.NAME, User.ROLE};
             String selection = User.NAME + " = ? AND " + User.HASH + " = ?";
-            String[] selectionArgs = {name, messageDigest.digest((name + pass).getBytes()).toString()};
+            String[] selectionArgs = {name, calcHash(name, pass)};
+            Log.i("OLOLO", "getUser: " + selectionArgs[1]);
+            Log.i("OLOLO", "getUser: " + name + pass);
             Cursor cursor = db.query(
                     User.TABLE_NAME,
                     columns,
@@ -76,5 +81,16 @@ public final class UserContract {
             }
         } catch (Exception e) {}
         return result;
+    }
+
+    public static String calcHash(String name, String pass) {
+        try {
+            if (messageDigest == null)
+                messageDigest = MessageDigest.getInstance("SHA-256");
+            messageDigest.update((pass + name + "secret").getBytes("UTF-8"));
+            return new BigInteger(1, messageDigest.digest()).toString(16);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

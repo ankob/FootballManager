@@ -4,6 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import com.footballmanager.model.Role;
 
 
 /**
@@ -11,7 +14,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 
 public class DbHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "Warships.db";
 
     public DbHelper(Context context) {
@@ -28,18 +31,25 @@ public class DbHelper extends SQLiteOpenHelper {
         // Manager role to edit
         ContentValues cv = new ContentValues();
         cv.put(RoleContract.Role.NAME, "Manager");
+        cv.put(RoleContract.Role._ID, RoleContract.MANGER_ROLE_ID);
         db.insert(RoleContract.Role.TABLE_NAME, null, cv);
 
         // Player role to view
         cv = new ContentValues();
         cv.put(RoleContract.Role.NAME, "Player");
         db.insert(RoleContract.Role.TABLE_NAME, null, cv);
+
+        // Create first admin user to all another.
+        UserContract.addNewUser("admin", "shortpassword", new Role("Manager", RoleContract.MANGER_ROLE_ID), db);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.i("OLOLO", "onCreate: 123");
         db.execSQL(UserContract.SQL_DELETE_ENTRIES);
         db.execSQL(RoleContract.SQL_DELETE_ENTRIES);
+        Log.i("OLOLO", "onCreate: 465");
         onCreate(db);
+        Log.i("OLOLO", "onCreate: 789");
     }
 
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {

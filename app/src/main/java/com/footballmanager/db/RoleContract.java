@@ -3,6 +3,7 @@ package com.footballmanager.db;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,6 +13,9 @@ import java.util.List;
  */
 
 public final class RoleContract {
+
+    public static final long MANGER_ROLE_ID = 1L;
+
     private RoleContract() {}
 
     public static class Role implements BaseColumns {
