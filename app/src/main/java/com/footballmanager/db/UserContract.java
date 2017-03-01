@@ -43,8 +43,6 @@ public final class UserContract {
             cv.put(User.NAME, newUser.getName());
             cv.put(User.HASH, calcHash(name, pass));
             cv.put(User.ROLE, role.getId());
-            Log.i("OLOLO", "addNewUser: " + cv.get(User.HASH));
-            Log.i("OLOLO", "addNewUser: " + name + pass);
             db.insert(User.TABLE_NAME, null, cv);
             return newUser;
         } catch (Exception e) {
@@ -58,8 +56,6 @@ public final class UserContract {
             String[] columns = {User.NAME, User.ROLE};
             String selection = User.NAME + " = ? AND " + User.HASH + " = ?";
             String[] selectionArgs = {name, calcHash(name, pass)};
-            Log.i("OLOLO", "getUser: " + selectionArgs[1]);
-            Log.i("OLOLO", "getUser: " + name + pass);
             Cursor cursor = db.query(
                     User.TABLE_NAME,
                     columns,

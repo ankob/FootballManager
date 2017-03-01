@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        fab.setVisibility(User.getInstance().getRole().getName() == "Manager" ? View.VISIBLE : View.GONE);
+        fab.setVisibility(User.getInstance().getRole().getName().equals("Manager") ? View.VISIBLE : View.GONE);
     }
 
 }

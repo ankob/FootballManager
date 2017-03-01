@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/games_menu_item">
+        <item android:title="@string/users_menu_item_label"
+            android:id="@+id/users_menu_item" />
+        <item android:title="@string/stadiums_menu_item_label"
+            android:id="@+id/stadiums_menu_item" />
+        <item android:title="@string/teams_menu_item_label"
+            android:id="@+id/teams_menu_item" />
+        <item android:title="@string/plays_menu_item_label"
+            android:id="@+id/plays_menu_item" />
+    </group>
+
+</menu>
