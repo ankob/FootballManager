@@ -12,6 +12,8 @@ public final class StadiumContract {
         public static final String TABLE_NAME = "stadiums";
         public static final String NAME = "name";
         public static final String FIELDS = "fields";
+
+        public static final String[] projection = { _ID, NAME, FIELDS };
     }
 
     public static final String SQL_CREATE_ENTRIES = "CREATE TABLE "

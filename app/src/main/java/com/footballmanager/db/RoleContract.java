@@ -15,12 +15,15 @@ import java.util.List;
 public final class RoleContract {
 
     public static final long MANGER_ROLE_ID = 1L;
+    public static final long PLAYER_ROLE_ID = 2L;
 
     private RoleContract() {}
 
     public static class Role implements BaseColumns {
         public static final String TABLE_NAME = "roles";
         public static final String NAME = "name";
+
+        public static final String[] projection = { _ID, NAME };
     }
 
     public static final String SQL_CREATE_ENTRIES = "CREATE TABLE "
@@ -49,8 +52,8 @@ public final class RoleContract {
         );
         while (cursor.moveToNext()) {
             roles.add(new com.footballmanager.model.Role(
-                    cursor.getString(cursor.getColumnIndex(Role.NAME)),
-                    cursor.getLong(cursor.getColumnIndex(Role._ID))
+                    cursor.getLong(cursor.getColumnIndex(Role._ID)),
+                    cursor.getString(cursor.getColumnIndex(Role.NAME))
             ));
         }
         return roles;

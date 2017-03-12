@@ -1,10 +1,8 @@
 package com.footballmanager;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,8 +11,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.footballmanager.admin_fragments.ItemFragment;
+import com.footballmanager.admin_fragments.UserItemFragment;
+
 public class AdminActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +34,15 @@ public class AdminActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        }
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
         }
@@ -50,22 +55,28 @@ public class AdminActivity extends AppCompatActivity
         return true;
     }
 
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        ItemFragment newFragment = null;
 
-        if (id == R.id.games_menu_item) {
-            // Handle the camera action
-        } else if (id == R.id.plays_menu_item) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-        } else if (id == R.id.teams_menu_item) {
-
-        } else if (id == R.id.stadiums_menu_item) {
-
+        switch (id) {
+            case R.id.users_menu_item:
+                newFragment = new UserItemFragment();
+                break;
+            default:
+                break;
         }
 
+        transaction.replace(R.id.content_admin, newFragment);
+        transaction.addToBackStack(null);
+
+        transaction.commit();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

@@ -14,7 +14,7 @@ import com.footballmanager.model.Role;
  */
 
 public class DbHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 8;
     public static final String DATABASE_NAME = "Warships.db";
 
     public DbHelper(Context context) {
@@ -26,10 +26,10 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL(UserContract.SQL_CREATE_ENTRIES);
         db.execSQL(RoleContract.SQL_CREATE_ENTRIES);
         db.execSQL(StadiumContract.SQL_CREATE_ENTRIES);
-        db.execSQL(MatchContract.SQL_CREATE_ENTRIES);
         db.execSQL(TeamContract.SQL_CREATE_ENTRIES);
+        db.execSQL(MatchContract.SQL_CREATE_ENTRIES);
         db.execSQL(RelPlayerTeamContract.SQL_CREATE_ENTRIES);
-        db.execSQL(RelMatchPlayerContract.SQL_CREATE_ENTRIES);
+        db.execSQL(RelMatchTeamContract.SQL_CREATE_ENTRIES);
 
         // Create roles
 
@@ -42,10 +42,14 @@ public class DbHelper extends SQLiteOpenHelper {
         // Player role to view
         cv = new ContentValues();
         cv.put(RoleContract.Role.NAME, "Player");
+        cv.put(RoleContract.Role._ID, RoleContract.PLAYER_ROLE_ID);
         db.insert(RoleContract.Role.TABLE_NAME, null, cv);
 
         // Create first admin user to all another.
-        UserContract.addNewUser("admin", "shortpassword", new Role("Manager", RoleContract.MANGER_ROLE_ID), db);
+        UserContract.addNewUser("admin", "shortpassword", new Role(RoleContract.MANGER_ROLE_ID, "Manager"), db);
+
+        // Create default anon player for reserving places on matches for unregistered players.
+        UserContract.addNewUser("anonymous", "shortpassword", new Role(RoleContract.PLAYER_ROLE_ID, "Player"), db);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -55,7 +59,7 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL(MatchContract.SQL_DELETE_ENTRIES);
         db.execSQL(TeamContract.SQL_DELETE_ENTRIES);
         db.execSQL(RelPlayerTeamContract.SQL_DELETE_ENTRIES);
-        db.execSQL(RelMatchPlayerContract.SQL_DELETE_ENTRIES);
+        db.execSQL(RelMatchTeamContract.SQL_DELETE_ENTRIES);
         onCreate(db);
     }
 

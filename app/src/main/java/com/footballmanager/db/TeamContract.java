@@ -11,6 +11,8 @@ public final class TeamContract {
     public static class Team implements BaseColumns {
         public static final String TABLE_NAME = "teams";
         public static final String NAME = "name";
+
+        public static final String[] projection = { _ID, NAME };
     }
 
     public static final String SQL_CREATE_ENTRIES = "CREATE TABLE "

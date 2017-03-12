@@ -18,8 +18,8 @@ public final class RelPlayerTeamContract {
             + RelPlayerTeam.TABLE_NAME + " ("
             + RelPlayerTeam._ID + " INTEGER PRIMARY KEY,"
             + RelPlayerTeam.PLAYER + " INTEGER,"
-            + RelPlayerTeam.TEAM + " INTEGER"
-            + " FOREIGN KEY (" + RelPlayerTeam.PLAYER + ") REFERENCES " + UserContract.User.TABLE_NAME + "(" + UserContract.User._ID + ")"
+            + RelPlayerTeam.TEAM + " INTEGER,"
+            + " FOREIGN KEY (" + RelPlayerTeam.PLAYER + ") REFERENCES " + UserContract.User.TABLE_NAME + "(" + UserContract.User._ID + "),"
             + " FOREIGN KEY (" + RelPlayerTeam.TEAM + ") REFERENCES " + TeamContract.Team.TABLE_NAME + "(" + TeamContract.Team._ID + ")" +
             ");";
     public static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + RelPlayerTeam.TABLE_NAME;
