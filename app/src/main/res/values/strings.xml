@@ -43,4 +43,5 @@
     <string name="teams_menu_item_label">Teams</string>
     <string name="edit_password_hint">Enter Password</string>
     <string name="repeat_password_hint">Repeat Password</string>
+    <string name="fields_number_label">Fields Number</string>
 </resources>

@@ -104,6 +104,10 @@ abstract public class ItemFragment extends Fragment {
                             getFragmentManager(),
                             dialog.getTitle()
                     );
+
+                    clear();
+                    addAll(getData());
+                    notifyDataSetChanged();
                 }
             });
             result.findViewById(R.id.delete_item_button).setOnClickListener(
