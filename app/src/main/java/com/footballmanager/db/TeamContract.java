@@ -1,8 +1,15 @@
 package com.footballmanager.db;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
+
+import com.footballmanager.model.MappedItem;
+import com.footballmanager.model.Team;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Andrew on 01-Mar-17.
@@ -14,7 +21,7 @@ public final class TeamContract {
         public static final String TABLE_NAME = "teams";
         public static final String NAME = "name";
 
-        public static final String[] projection = { _ID, NAME };
+        public static final String[] projection = { TABLE_NAME + "." + _ID, NAME };
     }
 
     public static final String SQL_CREATE_ENTRIES = "CREATE TABLE "
@@ -40,5 +47,21 @@ public final class TeamContract {
                 Team._ID + " = ?",
                 whereArgs
         );
+    }
+
+    public static List<MappedItem> getTeams(SQLiteDatabase db) {
+        List<MappedItem> result = new LinkedList<>();
+        Cursor cursor = db.query(
+                Team.TABLE_NAME,
+                Team.projection,
+                "",
+                null,
+                "",
+                "",
+                ""
+        );
+        while (cursor.moveToNext())
+            result.add(com.footballmanager.model.Team.makeInstance(cursor, db));
+        return result;
     }
 }

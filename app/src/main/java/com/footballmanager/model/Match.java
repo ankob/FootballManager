@@ -1,10 +1,12 @@
 package com.footballmanager.model;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.footballmanager.db.MatchContract;
 import com.footballmanager.db.RelMatchTeamContract;
+import com.footballmanager.db.RelPlayerTeamContract;
 import com.footballmanager.db.StadiumContract;
 import com.footballmanager.db.TeamContract;
 
@@ -26,7 +28,9 @@ public class Match extends MappedItem {
     private String result;
     private List<Team> teams;
 
-    public static final SimpleDateFormat datetimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
+    public static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+    public static final SimpleDateFormat datetimeFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
     protected static final String teamsDelimiter = " vs ";
 
     public Match(long id, Date datetime, int duration, Stadium stadium, String result, List<Team> teams) {
@@ -73,7 +77,7 @@ public class Match extends MappedItem {
 
     public static Match makeInstance(Cursor cursor, SQLiteDatabase db) {
         try {
-            long matchId = cursor.getLong(cursor.getColumnIndex(MatchContract.Match._ID));
+            long matchId = cursor.getLong(cursor.getColumnIndex(MatchContract.Match.TABLE_NAME + "." + MatchContract.Match._ID));
             String[] stadiumWhereArgs = { Long.toString(matchId) };
             Cursor stadiumCursor = db.query(
                     StadiumContract.Stadium.TABLE_NAME,
@@ -117,4 +121,40 @@ public class Match extends MappedItem {
         }
     }
 
+    public static void saveMatch(
+            String datetime,
+            int duration,
+            Stadium stadium,
+            String result,
+            Team team1,
+            Team team2,
+            SQLiteDatabase db
+    ) {
+        ContentValues cv = new ContentValues();
+        cv.put(MatchContract.Match.DATETIME, datetime);
+        cv.put(MatchContract.Match.DURATION, duration);
+        cv.put(MatchContract.Match.RESULT, result);
+        cv.put(MatchContract.Match.STADIUM, stadium.getId());
+        long newId = db.insert(
+                MatchContract.Match.TABLE_NAME,
+                null,
+                cv
+        );
+        cv = new ContentValues();
+        cv.put(RelMatchTeamContract.RelMatchTeam.TEAM, team1.getId());
+        cv.put(RelMatchTeamContract.RelMatchTeam.MATCH, newId);
+        db.insert(
+                RelMatchTeamContract.RelMatchTeam.TABLE_NAME,
+                null,
+                cv
+        );
+        cv = new ContentValues();
+        cv.put(RelMatchTeamContract.RelMatchTeam.TEAM, team2.getId());
+        cv.put(RelMatchTeamContract.RelMatchTeam.MATCH, newId);
+        db.insert(
+                RelMatchTeamContract.RelMatchTeam.TABLE_NAME,
+                null,
+                cv
+        );
+    }
 }

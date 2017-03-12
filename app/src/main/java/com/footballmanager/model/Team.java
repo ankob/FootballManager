@@ -38,7 +38,7 @@ public class Team extends MappedItem {
     }
 
     public static Team makeInstance(Cursor cursor, SQLiteDatabase db) {
-        long teamId = cursor.getLong(cursor.getColumnIndex(TeamContract.Team._ID));
+        long teamId = cursor.getLong(cursor.getColumnIndex(TeamContract.Team.TABLE_NAME + "." + TeamContract.Team._ID));
         String[] whereArgs = { Long.toString(teamId) };
         Cursor userCursor = db.query(
                 UserContract.User.TABLE_NAME + " INNER JOIN " + RelPlayerTeamContract.RelPlayerTeam.TABLE_NAME,

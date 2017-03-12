@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.footballmanager.admin_fragments.ItemFragment;
+import com.footballmanager.admin_fragments.MatchItemFragment;
 import com.footballmanager.admin_fragments.StadiumItemFragment;
 import com.footballmanager.admin_fragments.TeamItemFragment;
 import com.footballmanager.admin_fragments.UserItemFragment;
@@ -76,6 +77,9 @@ public class AdminActivity extends AppCompatActivity
                 break;
             case R.id.teams_menu_item:
                 newFragment = new TeamItemFragment();
+                break;
+            case R.id.plays_menu_item:
+                newFragment = new MatchItemFragment();
                 break;
             default:
                 break;

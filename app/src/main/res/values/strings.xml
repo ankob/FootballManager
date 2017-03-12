@@ -44,4 +44,9 @@
     <string name="edit_password_hint">Enter Password</string>
     <string name="repeat_password_hint">Repeat Password</string>
     <string name="fields_number_label">Fields Number</string>
+    <string name="versus_label">VS</string>
+    <string name="edit_time_label">Choose Time</string>
+    <string name="edit_date_label">Choose Date</string>
+    <string name="duration_select_label">Choose Match Duration</string>
+    <string name="edit_result_hint">Enter Match Result</string>
 </resources>
