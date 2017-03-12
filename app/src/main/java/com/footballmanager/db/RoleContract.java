@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import com.footballmanager.model.MappedItem;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,12 +35,10 @@ public final class RoleContract {
             ");";
     public static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + Role.TABLE_NAME;
 
-    private static List<com.footballmanager.model.Role> roles = new LinkedList<>();
 
-    public static List<com.footballmanager.model.Role> getRoles(SQLiteDatabase db) {
-        if (!roles.isEmpty())
-            return roles;
+    public static List<MappedItem> getRoles(SQLiteDatabase db) {
 
+        List<MappedItem> roles = new LinkedList<>();
         String[] columns = { Role.NAME, Role._ID };
         String[] selectArgs = {};
         Cursor cursor = db.query(
@@ -51,10 +51,7 @@ public final class RoleContract {
                 ""
         );
         while (cursor.moveToNext()) {
-            roles.add(new com.footballmanager.model.Role(
-                    cursor.getLong(cursor.getColumnIndex(Role._ID)),
-                    cursor.getString(cursor.getColumnIndex(Role.NAME))
-            ));
+            roles.add(com.footballmanager.model.Role.makeInstance(cursor, db));
         }
         return roles;
     }
