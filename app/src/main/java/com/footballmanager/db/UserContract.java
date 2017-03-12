@@ -26,7 +26,7 @@ public final class UserContract {
         public static final String HASH = "hash";
         public static final String ROLE = "role_id";
 
-        public static final String[] projection = { _ID, NAME, ROLE };
+        public static final String[] projection = { TABLE_NAME + "." + _ID, NAME, ROLE };
     }
 
     public static final String SQL_CREATE_ENTRIES = "CREATE TABLE "
@@ -67,7 +67,7 @@ public final class UserContract {
             );
             if (cursor.moveToNext()) {
                 String userName = cursor.getString(cursor.getColumnIndex(User.NAME));
-                long userId = cursor.getLong(cursor.getColumnIndex(User._ID));
+                long userId = cursor.getLong(cursor.getColumnIndex(User.TABLE_NAME + "." + User._ID));
                 long roleId = cursor.getLong(cursor.getColumnIndex(User.ROLE));
                 com.footballmanager.model.Role userRole = null;
                 for (com.footballmanager.model.Role role: RoleContract.getRoles(db)) {

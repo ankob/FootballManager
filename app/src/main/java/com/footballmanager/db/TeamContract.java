@@ -1,5 +1,7 @@
 package com.footballmanager.db;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
 /**
@@ -22,4 +24,21 @@ public final class TeamContract {
             ");";
     public static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + Team.TABLE_NAME;
 
+    public static void saveTeam(String name, SQLiteDatabase db) {
+        ContentValues cv = new ContentValues();
+        cv.put(Team.NAME, name);
+        db.insert(Team.TABLE_NAME, null, cv);
+    }
+
+    public static void updateTeam(long id, String name, SQLiteDatabase db) {
+        ContentValues cv = new ContentValues();
+        cv.put(Team.NAME, name);
+        String[] whereArgs = { Long.toString(id) };
+        db.update(
+                Team.TABLE_NAME,
+                cv,
+                Team._ID + " = ?",
+                whereArgs
+        );
+    }
 }

@@ -2,6 +2,7 @@ package com.footballmanager.admin_fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -22,12 +23,19 @@ import com.footballmanager.db.DbHelper;
 import com.footballmanager.admin_fragments.edit_dialogs.EntityEditDialog;
 import com.footballmanager.model.MappedItem;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  * A fragment representing a list of Items.
  */
 abstract public class ItemFragment extends Fragment {
+
+    abstract protected String getTableName();
+    abstract protected String getIdColumnName();
+    abstract protected MappedItem getEmptyItem();
+    abstract protected MappedItem makeInstance(Cursor cursor, SQLiteDatabase db);
+    abstract protected String[] getProjection();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,22 +69,22 @@ abstract public class ItemFragment extends Fragment {
         return view;
     }
 
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    protected List<MappedItem> getData() {
+        List<MappedItem> result = new LinkedList<>();
+        SQLiteDatabase db = new DbHelper(getContext()).getReadableDatabase();
+        Cursor cursor = db.query(
+                getTableName(),
+                getProjection(),
+                "",
+                null,
+                "",
+                "",
+                ""
+        );
+        while (cursor.moveToNext())
+            result.add(makeInstance(cursor, db));
+        return result;
     }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    abstract protected String getTableName();
-    abstract protected String getIdColumnName();
-    abstract protected MappedItem getEmptyItem();
-
-    abstract protected List<MappedItem> getData();
 
     abstract protected EntityEditDialog getEntityEditDialog(MappedItem item);
 
